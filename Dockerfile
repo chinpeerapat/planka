@@ -47,14 +47,17 @@ COPY --from=server-dependencies --chown=node:node /app/node_modules node_modules
 COPY --from=client --chown=node:node /app/build public
 COPY --from=client --chown=node:node /app/build/index.html views/index.ejs
 
-VOLUME /app/public/user-avatars
-VOLUME /app/public/project-background-images
-VOLUME /app/private/attachments
+# Use a single mount point for all volumes
+VOLUME /app/data
+
+# Create necessary subdirectories inside /app/data
+RUN mkdir -p /app/data/user-avatars \
+  && mkdir -p /app/data/project-background-images \
+  && mkdir -p /app/data/attachments
 
 EXPOSE 1337
 
 HEALTHCHECK --interval=10s --timeout=2s --start-period=15s \
   CMD node ./healthcheck.js
-
 
 CMD [ "bash", "start.sh" ]
