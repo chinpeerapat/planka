@@ -47,9 +47,6 @@ COPY --from=server-dependencies --chown=node:node /app/node_modules node_modules
 COPY --from=client --chown=node:node /app/build public
 COPY --from=client --chown=node:node /app/build/index.html views/index.ejs
 
-# Use a single mount point for all volumes
-VOLUME /app/data
-
 # Create necessary subdirectories inside /app/data
 RUN mkdir -p /app/data/user-avatars \
   && mkdir -p /app/data/project-background-images \
